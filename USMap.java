@@ -18,14 +18,24 @@ public class USMap {
 		StdDraw.setCanvasSize(900, 512);
 		StdDraw.setXscale(128.0, 65.0);
 		StdDraw.setYscale(22.0, 52.0);
+	
+		
+			 
 	}
 	public static void main (String[] args) {
-			StdDraw.setTitle("USMap");
-			StdDraw.setCanvasSize(900, 512);
-			StdDraw.setXscale(128.0, 65.0);
-			StdDraw.setYscale(22.0, 52.0);
-			FileUtils.openToRead("cities.txt");
-			 StdDraw.setPenColor(StdDraw.GRAY);
-			StdDraw.circle(200.0,30.0,100.0);
+			USMap BLE = new USMap();
+			BLE.setupCanvas();
+			BLE.setUpProgram();
        }
+       public void setUpProgram() {
+		   Scanner scanner = FileUtils.openToRead("cities.txt");
+		   			StdDraw.setPenColor(StdDraw.GRAY);
+			while (scanner.hasNextLine())
+			{
+				double firstVal = Double.parseDouble(scanner.next());
+				double secondVal = Double.parseDouble(scanner.next());
+				StdDraw.circle(firstVal, secondVal, 0.006);
+				scanner.nextLine();
+			}
+	   }
 }
