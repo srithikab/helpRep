@@ -1,9 +1,15 @@
 /**
  *	The game of Pig.
- *	(Description here)
- *
- *	@author	
- *	@since	
+ *	User can decide wether to play with the computer, or run a simulation.
+ * 	In playing with the computer, the goal is to get to a 100. However,
+ * 	if you roll a 1, you will lose your current turn, and it's the computers
+ *  turn, which is the same for the computer. In the simulation, it is
+ *  a version of the Monte Carlo simulation, where the user enters a number
+ *  of turns that the computer will simulate, and give the probabilty
+ *  of rolling a couple of numbers.
+ *  
+ *	@author Srithika Barakam	
+ *	@since 09/13/24
  */
 public class PigGame {
 	private int userTurn = 0;
@@ -12,6 +18,7 @@ public class PigGame {
 	private int computerTotal = 0;
 	private boolean isUserTurn = true;
 	private Dice dice = new Dice();
+	private double[] statisticsCounter = {0.0,0.0,0.0,0.0,0.0,0.0,0.0};
 	
 	public static void main(String[] args) {
 		PigGame pigG = new PigGame();
@@ -23,19 +30,85 @@ public class PigGame {
 		boolean check = false;
 		String str = "";
 		do {
-			str = Prompt.getString("Play game or Statistics (p or s) -> ");
+			str = Prompt.getString("Play game or Statistics (p or s)");
 			System.out.println("");
 			if (str.equals("p") || str.equals("s"))
 			{
 				check = true;
 			}
+			else {
+			}
 		} while (check == false);
-		if (str == "s") {
-			
+		if (str.equals("s")) {
+			runStats();
 		}
 		else {
 			play();
 		}
+	}
+	
+	public void runStats() {
+		System.out.print("Run statistical analysis - \"Hold at 20\"\n\n"); 
+		int numberOfTurns = Prompt.getInt("Number of turns ", 1000, 1000000);
+		System.out.print("\nEstimated Score Probability\n");
+		System.out.println();
+		for (int i = 0; i < numberOfTurns; i++) {
+			computerStatsTurn();
+		}
+		//System.out.println(statisticsCounter[0] + " " + numberOfTurns);
+		System.out.println("0       " + (statisticsCounter[0]/numberOfTurns));
+		
+		//System.out.println(statisticsCounter[1] + " " + numberOfTurns);
+		System.out.println("20      " + (statisticsCounter[1]/numberOfTurns));
+		
+		//System.out.println(statisticsCounter[2] + " " + numberOfTurns);
+		System.out.println("21      " + (statisticsCounter[2]/numberOfTurns));
+		
+		//System.out.println(statisticsCounter[3] + " " + numberOfTurns);
+		System.out.println("22      " + (statisticsCounter[3]/numberOfTurns));
+		
+		//System.out.println(statisticsCounter[4] + " " + numberOfTurns);
+		System.out.println("23      " + (statisticsCounter[4]/numberOfTurns));
+		
+		//System.out.println(statisticsCounter[5] + " " + numberOfTurns);
+		System.out.println("24      " + (statisticsCounter[5]/numberOfTurns));
+		
+		//System.out.println(statisticsCounter[6] + " " + numberOfTurns);
+		System.out.println("25      " + (statisticsCounter[6]/numberOfTurns));
+		System.out.println();
+		
+	}
+	
+	public void computerStatsTurn() {
+		boolean bool = true;
+		while (bool) {
+			int diceVal = dice.roll();
+		if (diceVal == 1) {
+			statisticsCounter[0]++;
+			bool = false;
+		}
+		else {
+			computerTurn += diceVal;
+			if (computerTurn >= 20) {
+				if (computerTurn == 20) 
+					statisticsCounter[1]++;
+				else if (computerTurn == 21)
+					statisticsCounter[2]++;
+				else if (computerTurn == 22)
+					statisticsCounter[3]++;
+				else if (computerTurn == 23)
+					statisticsCounter[4]++;
+				else if (computerTurn == 24)
+					statisticsCounter[5]++;
+				else if (computerTurn == 25) 
+					statisticsCounter[6]++;	
+					bool = false;
+				
+				}
+		
+			}
+		}
+		computerTurn = 0;
 	}
 	
 	public void play() {
@@ -66,7 +139,8 @@ public class PigGame {
 					computerTurn();
 				} else {
 					System.out.println("\nComputer will HOLD.");
-					System.out.println("Computer total score: " + (computerTotal + computerTurn));
+					System.out.println("Computer total score: " + 
+										(computerTotal + computerTurn));
 					System.out.println();
 					System.out.println("Too bad. COMPUTER WON.\n");
 					break;
@@ -91,7 +165,8 @@ public class PigGame {
 		if (diceVal == 1) {
 			userTurn = 0;
 			isUserTurn = false;
-			System.out.println("\nYou LOSE your turn.\nYour total score: " + userTotal);
+			System.out.println("\nYou LOSE your turn.\nYour total score: " + 
+															userTotal);
 			System.out.println();
 		}
 		else {
@@ -107,7 +182,8 @@ public class PigGame {
 		if (diceVal == 1) {
 			computerTurn = 0;
 			isUserTurn = true;
-			System.out.print("\nComputer loses turn.\nComputer total score: " + computerTotal);
+			System.out.print("\nComputer loses turn.\nComputer total score: " + 
+														computerTotal);
 			System.out.println("\n");
 		}
 		else {
@@ -144,4 +220,3 @@ public class PigGame {
 	}
 	
 }
-
