@@ -12,13 +12,20 @@
  *	@since 09/13/24
  */
 public class PigGame {
-	private int userTurn = 0;
-	private int userTotal = 0;
-	private int computerTurn = 0;
-	private int computerTotal = 0;
-	private boolean isUserTurn = true;
-	private Dice dice = new Dice();
-	private double[] statisticsCounter = {0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+	private int userTurn = 0; // users # of points on turn
+	private int userTotal = 0; // users total TOTAL # of pointsnumber
+	private int computerTurn = 0; //computers # of points on turn
+	private int computerTotal = 0; // computers total TOTAL # of pointsnumber
+	private boolean isUserTurn = true; // determines user/computer method
+	private Dice dice = new Dice(); // object of dice class
+	private double[] statisticsCounter = {0.0,0.0,0.0,0.0,0.0,0.0,0.0}; 
+	// used for statistics, to collect values
+
+	/** This method runs the two different methods needed to be run.
+	 * Precondition:Program has no errors.
+	 * @param n/a
+	 * @return n/a
+	 */
 	
 	public static void main(String[] args) {
 		PigGame pigG = new PigGame();
@@ -26,11 +33,19 @@ public class PigGame {
 			pigG.userChoice();
 		}
 		
+	/** This method is used for the first choice prompt, when the user
+	 *  chooses between statistics or playing the game. Whatever the user
+  	 *  chooses, is what is run.
+	 * Postcondition: Another method is run depending on user choice
+	 * @param n/a
+	 * @return n/a
+	 */
+	
 	public void userChoice() {
 		boolean check = false;
 		String str = "";
 		do {
-			str = Prompt.getString("Play game or Statistics (p or s)");
+			str = Prompt.getString("Play game or Statistics (p or s) ");
 			System.out.println("");
 			if (str.equals("p") || str.equals("s"))
 			{
@@ -47,6 +62,14 @@ public class PigGame {
 		}
 	}
 	
+	/** This method is used when the user chooses statistics. This method
+	 *  calls the computer stats method, which is where the computation
+  	 *  occurs.
+	 *  Postcondition: Statistics is printed out based on user entry.
+	 *  @param n/a
+	 *  @return n/a
+	 */
+	
 	public void runStats() {
 		System.out.print("Run statistical analysis - \"Hold at 20\"\n\n"); 
 		int numberOfTurns = Prompt.getInt("Number of turns ", 1000, 1000000);
@@ -55,29 +78,25 @@ public class PigGame {
 		for (int i = 0; i < numberOfTurns; i++) {
 			computerStatsTurn();
 		}
-		//System.out.println(statisticsCounter[0] + " " + numberOfTurns);
+
 		System.out.println("0       " + (statisticsCounter[0]/numberOfTurns));
-		
-		//System.out.println(statisticsCounter[1] + " " + numberOfTurns);
 		System.out.println("20      " + (statisticsCounter[1]/numberOfTurns));
-		
-		//System.out.println(statisticsCounter[2] + " " + numberOfTurns);
 		System.out.println("21      " + (statisticsCounter[2]/numberOfTurns));
-		
-		//System.out.println(statisticsCounter[3] + " " + numberOfTurns);
 		System.out.println("22      " + (statisticsCounter[3]/numberOfTurns));
-		
-		//System.out.println(statisticsCounter[4] + " " + numberOfTurns);
 		System.out.println("23      " + (statisticsCounter[4]/numberOfTurns));
-		
-		//System.out.println(statisticsCounter[5] + " " + numberOfTurns);
 		System.out.println("24      " + (statisticsCounter[5]/numberOfTurns));
-		
-		//System.out.println(statisticsCounter[6] + " " + numberOfTurns);
 		System.out.println("25      " + (statisticsCounter[6]/numberOfTurns));
 		System.out.println();
 		
 	}
+	
+	/** This method is where the statistics are calculated, by running
+	 *  the game without printing anything out, and stopping if the dice
+  	 *  roles past 20.
+	 * Postcondition: Global Variable statisticsCounter gets updated.
+	 * @param n/a
+	 * @return n/a
+	 */
 	
 	public void computerStatsTurn() {
 		boolean bool = true;
@@ -110,6 +129,19 @@ public class PigGame {
 		}
 		computerTurn = 0;
 	}
+	
+	/** This method is where both the computer and user playing is occuring.
+	 *  A do while is runned, so that the user goes first, then prompting
+  	 *  the computers part for the user to enter. Depending on whos turn 
+  	 *  it is, which is based on the global variable isUserTurn, the computer
+  	 *  will prompt the user/computer with either the roll option, or enter
+  	 *  for computers turn. At the end, if the computer has gotten more 
+  	 *  than a 100, it will print out a computer win, or it will print out
+  	 * 	a user victory.
+	 * Postcondition: APrints out who has won (at the very end).
+	 * @param n/a
+	 * @return n/a
+	 */
 	
 	public void play() {
 		do {
@@ -152,10 +184,19 @@ public class PigGame {
 			System.out.println("\nUser HOLD.");
 			System.out.println("User total score: " + (userTotal + userTurn));
 			System.out.println();
-			System.out.println("Too bad. USER WON.\n");
+			System.out.println("CONGRATULATIONS, YOU WON!!!\n");
 		}
+		System.out.print("Thanks for playing Pig game!!!\n\n");
 			
 	}
+	
+	/** This method is where the dice is printed out, and the userTurn value
+	 *  is increasing. If the dice is a 1, the user will lose their turn,
+	 *  but if it's not a 1, the value is added to userTurn.
+	 * Postcondition: Dice is printed out, and userTurn is getting updated.
+	 * @param n/a
+	 * @return n/a
+	 */
 	
 	public void userTurn() {
 		int diceVal = dice.roll();
@@ -173,6 +214,16 @@ public class PigGame {
 			userTurn += diceVal;
 		}
 	}
+	
+	/** This method is similar to userTurn, since it is where the dice is
+	 *  being printed out, and the computerTurn val is getting updated.
+	 *  However, if the computer gets any more than a 20 on a turn, it will
+	 *  automatically hold.
+	 *  Postcondition: Computer dice is printed out, and computerVal is 
+	 *  updated.
+	 *  @param n/a
+	 *  @return n/a
+	 */
 	
 	public void computerTurn() {
 		int diceVal = dice.roll();
@@ -196,7 +247,11 @@ public class PigGame {
 		}
 	}
 		
-	/**	Print the introduction to the game */
+	/** This method prints the introduction to the game.
+	 * Post/precondition: n/a
+	 * @param n/a
+	 * @return n/a
+	 */ 
 	public void printIntroduction() {
 		System.out.println("\n");
 		System.out.println("______ _         _____");
