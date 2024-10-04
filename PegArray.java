@@ -27,7 +27,12 @@ public class PegArray {
 		
 		
 		}
-	
+		
+	/**
+	 *	Constructor
+	 * 	Initialzes pegs array
+	 *	@param str		String entered when called.
+	 */
 	public PegArray(String str) {
 		pegs= new Peg[4];
 		tempPegs = new Peg[4];
