@@ -1,8 +1,12 @@
 /**
  *	Plays the game of MasterMind.
- *	<Describe the game here>
- *	@author
- *	@since
+ *	The computer will make up a 4 letter code, ranging from letters A-F.
+ * 	The user will get 10 guesses to try and guess the master key. After 
+ *  every guess, they will get an amount of partial matches or exact matches
+ * 	to help with their guessing. Depending on wether if they are able to
+ *  guess the code in 10 guesses, you win, or lose.
+ *	@author	Srithika Barakam
+ *	@since	10/02/24
  */
 
 public class MasterMind {
@@ -10,8 +14,8 @@ public class MasterMind {
 	private boolean reveal;			// true = reveal the master combination
 	private PegArray[] guesses;		// the array of guessed peg arrays
 	private PegArray master;		// the master (key) peg array
-	private int countGuesses;
-	private int fullMatchScore;
+	private int countGuesses;		// keep track of how many guesses used
+	private int fullMatchScore;		// keep track on how many exact matches
 	
 	// Constants
 	private final int PEGS_IN_CODE = 4;		// Number of pegs in code
@@ -40,6 +44,13 @@ public class MasterMind {
 		
 	}
 	
+	/**
+	 *  Creates master key to use for the game.
+	 *	Postcondition: field master contains PegArray class with master key 
+	 *  @param			none
+	 *	@return			none
+	 */
+	
 	public void masterKeyCreater() {
 		String masterKey = "";
 		Dice dice = new Dice();
@@ -66,6 +77,13 @@ public class MasterMind {
 		master = new PegArray(masterKey);
 	}
 	
+	/**
+	 *  Validates wether the users input is 4 letters, and between A-F.
+	 * 	Precondition: User enters an input.
+	 *	Postcondition: Wether the user has a valid guess or not.
+	 *  @param str		the users guess
+	 *	@return 		true/false if input is valid
+	 */
 	
 	public boolean validateUserPrompt(String str) {
 		boolean isValid = false;
@@ -85,7 +103,12 @@ public class MasterMind {
 		return false;	
 	}
 	
-	
+	/**
+	 *  Find partial matches between master (key) peg array and this peg array
+	 *	Postcondition: guesses array has guess stored in the array
+	 *  @param			n/a	
+	 *	@return			The amount of exact matches in a turn
+	 */
 	public int oneTurn() {
 		boolean isValid = false;
 		String prompt = "";
@@ -94,7 +117,7 @@ public class MasterMind {
 			System.out.println();
 			prompt = pm.getString("Enter the code using (A,B,C,D,E,F)." 
 										+ "For example, ABCD or abcd from" 
-										+ "left-to-right -> ");
+										+ " left-to-right");
 			prompt = prompt.toUpperCase();
 			isValid = validateUserPrompt(prompt);
 			if (!isValid) 
@@ -114,7 +137,28 @@ public class MasterMind {
 		
 	}
 	
+	/**
+	 *  User plays game. Once user uses all 10 guesses, or guesses the 
+	 * 	correct master code, reveal is now true, and the game is over.
+	 *	Postcondition: User plays all of the turns/until guesses is over.
+	 *  @param			none
+	 *	@return			none
+	 */
+	
 	public void play() {
+		boolean isWin = false;
+		while (reveal == false && countGuesses < 10) {
+			printBoard();
+			int score = oneTurn();
+			if (score == 4) {
+				reveal = true;
+				isWin = true;	
+			}
+			
+			
+		}
+		
+		/*
 		for (int i = 0; i < 10; i++) {
 			printBoard();
 			int score = oneTurn();
@@ -123,8 +167,21 @@ public class MasterMind {
 			}
 		}
 		reveal = true;
-		printBoard();
+		*/
 		
+		reveal = true;
+		printBoard();
+		if (isWin) {
+			
+			System.out.print("\nNice work! You found the master code in " + countGuesses
+							 + " guesses!\n\n");
+		}
+		else 
+		{
+			System.out.print("\nOops. You were unable to find the solution "
+							+ "in 10 guesses.\n\n");
+		}
+	
 		
 	}
 
@@ -210,5 +267,4 @@ public class MasterMind {
 		System.out.printf("   %d      %d    |\n",
 							guesses[t].getExact(), guesses[t].getPartial());
 	}
-
 }
