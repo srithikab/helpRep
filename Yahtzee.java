@@ -1,25 +1,75 @@
 import java.util.Scanner;
 
-public class Yahtzee {	
+public class Yahtzee {
+	
+	private DiceGroup dg = new DiceGroup();
+	private YahtzeePlayer yz1 = new YahtzeePlayer();
+	private	YahtzeePlayer yz2 = new YahtzeePlayer();
+	private YahtzeeScoreCard ysc1 = new YahtzeeScoreCard();
+		
 	public static void main(String [] args) {
 		Yahtzee yz = new Yahtzee();
-		yz.playGame();
+		yz.run();
 	}
-	public void startGame() {
-		YahtzeePlayer yzpPlayer1 = new YahtzeePlayer();
-		YahtzeePlayer yzpPlayer2 = new YahtzeePlayer();
-		Scanner scanner = new Scanner();
-		System.out.print("Player 1, please enter your first name -> ");
-		String name1 = scanner.next();
-		System.out.print("Player 2, please enter your first name -> ");
-		String name2 = scanner.next();
-		yzpPlayer1.setName(name1);
-		yzpPlayer2.setName(name2);
-		System.out.print("Let's see who will go first. Aaron, please " +
-						 "hit enter to roll the dice -> ");
-		Scanner.next();
+	public void run() {
+		
+		printHeader(); 
+		
+		yz1.setName(Prompt.getString("Player 1, please enter your"
+										+" first name"));
+		System.out.println();
+		yz2.setName(Prompt.getString("Player 2, please enter your"
+									+" first name"));
+		System.out.println();
+		String canContinue = Prompt.getString(("Let's see who will go first. " 
+				+ yz1.getName() + " please hit enter to roll the dice -> "));
+				
+		startGame();
+		playGame();
+	}
+	public void startGame() {							
+		DiceGroup dg = new DiceGroup();
+		dg.rollDice();
+		int val1 = dg.getTotal();
+		dg.printDice();
+		
+		String canContinue2 = Prompt.getString(("Let's see who will go first. " 
+				+ yz2.getName() + " please hit enter to roll the dice "));
+							
+		dg.rollDice();
+		int val2 = dg.getTotal();
+		dg.printDice();
+		
+		System.out.println(yz1.getName() + ", you rolled a sum of " + val1
+		+ ", and " + yz2.getName() + ", you rolled a sum of " + val2);
+		
+		if (val2 > val1) {
+			String name = yz1.getName();
+			yz1.setName(yz2.getName());
+			yz2.setName(name);
+			
+			System.out.print("\n" + yz1.getName() + ", since your sum was higher " +
+							"you'll roll first.");
+		}
+		else if (val2 == val1) {
+			startGame();
+		}
+		else {
+			System.out.print("\n" + yz1.getName() + ", since your sum was higher " +
+							"you'll roll first.");
+		}
 		
 	}
+	
+	public void playGame() {
+		ysc1.printCardHeader();
+		ysc1.printPlayerScore(yz1);
+		ysc1.printPlayerScore(yz2);
+
+		
+	}
+	
+	
 	public void printHeader() {
 		System.out.println("\n");
 		System.out.println("+------------------------------------------------------------------------------------+");
