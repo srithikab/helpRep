@@ -46,6 +46,7 @@ public class Prompt
 	 *	@param ask  The prompt line
 	 *	@return  	The character input
 	 */
+	 /*
 	public static char getChar (String ask)
 	{
 			char input = ' ';
@@ -60,7 +61,7 @@ public class Prompt
 			return input;
 		}
 	}
-	
+	*/
 	/**
 	 *	Prompts the user for an integer and returns the integer.
 	 *	@param ask  The prompt line
