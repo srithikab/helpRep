@@ -110,13 +110,19 @@ public class WordFinder {
 	 */
 	public int binarySearchIterative(List<String> listOfWords, String target) {
 		// Insert your code here
+		int low = 0;
+		int high = listOfWords.size();
+		int mid = (low + high)/2;
 		
-		SortMethods sm = new SortMethods();
-		sm.mergeSort(listOfWords);
-		
-		for (int i = 0; i < listOfWords.size(); i++) {
-			if (listOfWords.get(i).equals(target))
-				return i;
+		while(!(high < low)){
+			if(listOfWords.get(mid).compareTo(target) == 0) return mid;
+			if(listOfWords.get(mid).compareTo(target) > 0){
+				high = mid - 1;
+			}
+			if(listOfWords.get(mid).compareTo(target) < 0){
+				low = mid + 1;
+			}
+			mid = (low + high)/2;
 		}
 		
 		// if target not found in list return negative number
