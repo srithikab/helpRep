@@ -46,22 +46,13 @@ public class Prompt
 	 *	@param ask  The prompt line
 	 *	@return  	The character input
 	 */
-	 /*
 	public static char getChar (String ask)
 	{
-			char input = ' ';
-			boolean found = false;
-			while(!found) {
-				String str = getString(ask);
-				try {
-					input = (char)(input);
-					found = true;
-				} catch (IOException e) {
-			}
-			return input;
-		}
+		char input = ' ';
+		boolean found = false;
+		return input;
 	}
-	*/
+	
 	/**
 	 *	Prompts the user for an integer and returns the integer.
 	 *	@param ask  The prompt line

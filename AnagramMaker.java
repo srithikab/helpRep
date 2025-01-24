@@ -1,11 +1,12 @@
 import java.util.ArrayList;
+
 /**
  *	AnagramMaker - <description goes here>
  *
  *	Requires the WordUtilities, SortMethods, Prompt, and FileUtils classes
  *
  *	@author	Srithika Barakam
- *	@since	1/15/2024
+ *	@since	01/19/25
  */
 public class AnagramMaker {
 								
@@ -19,17 +20,20 @@ public class AnagramMaker {
 	// variables for constraining the print output of AnagramMaker
 	private int numWords;		// the number of words in a phrase to print
 	private int maxPhrases;		// the maximum number of phrases to print
-	private int numPhrases;		// the number of phrases that have been printed
-	boolean userPlaying;        // determines wether user wants to play or not
+	private int numPhrasesPrint;		// the number of phrases that have been printed
+	private ArrayList<String> anagram = new ArrayList<>();
+	String newPhrase;
+	boolean play = true;
+
 		
 	/*	Initialize the database inside WordUtilities
 	 *	The database of words does NOT have to be sorted for AnagramMaker to work,
 	 *	but the output will appear in order if you DO sort.
 	 */
 	public AnagramMaker() {
-		WordUtilities wu = new WordUtilities();
-		//wu.readWordsFromFile(FILE_NAME);
-		//wu.sortWords();
+		wu = new WordUtilities();
+		wu.readWordsFromFile(FILE_NAME);
+		wu.sortWords();
 	}
 	
 	public static void main(String[] args) {
@@ -61,38 +65,86 @@ public class AnagramMaker {
 	 *	characters.
 	 */
 	public void runAnagramMaker() {
-		
-		while(userPlaying) {
+		while (play) {
+			String getWord = Prompt.getString("\nWord(s), name or phrase (q to quit) ");
+			if (getWord.equalsIgnoreCase("q")) 
+				return;
+			numWords = Prompt.getInt("Number of words in anagram ");
+			numPhrasesPrint = Prompt.getInt("Maximum number of anagrams to print ");
+			int numTimes = numPhrasesPrint;
+			System.out.println();
+			newPhrase = removeNonAlpha(getWord);
+			makeAnagram(newPhrase);
+			System.out.println("\nStopped at " + numTimes + " anagrams.");
+		}
+	}
+	
+	private void makeAnagram(String phrase) {
+		if (numPhrasesPrint <= 0 || (anagram.size() >= numWords && phrase.length() > 0)) {
+			return;
+		}
+		if (phrase.length() == 0) {
+			if (anagram.size() == numWords) {
+				printAnagram(anagram);
+				numPhrasesPrint--;
+			}
+			return;
+		}
+
+		if (phrase.length() == 1) {
+			return;
+		}
+		ArrayList<String> allWords = wu.allWords(phrase);
+
+		for (int i = 0; i < allWords.size() && anagram.size() < numWords; i++) {
+			String word = allWords.get(i);
 			
-			String choice = getUserChoice();
-			if (wordPlaying) {
-				createAnagrams(choice);
-				
+			// add to anagram
+			anagram.add(word);
+			
+			// remove the word chars from phrase
+            String newPhrase2 = removeWord(phrase, word);
+
+			makeAnagram(newPhrase2);
+            			
+			anagram.remove(word);
+		}
+	}
+	
+	private String removeWord(String phrase, String word) {
+		if (word.length() == 0) {
+			return phrase;
+		}
+		int chCount [] = new int[122];
+		for (int i = 0;i < word.length(); i++) {
+			chCount[word.charAt(i)]++;
+		}
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0;i < phrase.length(); i++) {
+			if (chCount[phrase.charAt(i)] > 0) {
+				chCount[phrase.charAt(i)]--;
+			} else {
+				sb.append(phrase.charAt(i));
 			}
 		}
-
+		return sb.toString();
 	}
-	/**
-	 *	Prompts the user for the words they want to use, how many words
-	 *  their anagram should be, and how many anagrams should be printed
-	 * 	out. The only one returned is the word that the program should be 
-	 * 	done on, and everything else is set with it's field variable.
-	 *	@param listOfWords		list of words to search
-	 *	@param target			the word to search for
-	 *	@return					if found, the index of the word inside words;
-	 *							if not found, a negative number
-	 */
-	public String getUserChoice() {
-
-		String choice = Prompt.getString("Word(s), name, or phrase (q to quit)");
-		if (choice.equalsIgnoreCase("q")) {
-			userPlaying = false;
+	
+	private void printAnagram(ArrayList<String> a) {
+		for (int i = 0; i < a.size(); i++) {
+			System.out.print(a.get(i) + " ");
 		}
-		else {
-			numWords = Prompt.getInt("Number of words in anagram -> ");
-			maxPhrases = Prompt.getInt("Maximum number of anagrams to print -> ");
-		}
-		return choice;
+		System.out.println();
+		
 	}
-	public String createAnagrams	
+	
+	private String removeNonAlpha(String str) {
+        StringBuilder sb = new StringBuilder();
+        for (char c : str.toCharArray()) {
+            if (Character.isLetter(c)) {
+                sb.append(c);
+            }
+        }
+        return sb.toString();
+    }
 }
